@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'StopID';
+    public $incrementing = false;
+    protected $keyType = 'integer';
+    protected $fillable = [
+        'StopID',
+        'longitude',
+        'latitude',
+    ];
+
+    public function stop()
+    {
+        return $this->belongsTo(Stop::class, 'StopID', 'StopID');
+    }
 }

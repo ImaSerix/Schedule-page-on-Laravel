@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('saved_stops', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('StopID');
+            $table->unsignedInteger('UserID');
             $table->timestamps();
+
+            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
+            $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
         });
     }
 
@@ -22,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('saved_stops', function (Blueprint $table) {
+            $table->dropForeign(['StopID']);
+        });
         Schema::dropIfExists('saved_stops');
     }
 };

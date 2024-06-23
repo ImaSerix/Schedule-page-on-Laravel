@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('route_networks', function (Blueprint $table) {
-            $table->unsignedInteger('RouteNetworkID')->primary();
-            $table->string("Name")->nullable();
-            $table->string('TransportType');
+        Schema::create('users', function (Blueprint $table) {
+            $table->unsignedInteger('UserID')->primary();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('route_networks');
+        Schema::dropIfExists('users');
     }
 };

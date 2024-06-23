@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('runs', function (Blueprint $table) {
-            $table->unsignedInteger('RunID')->primary();
+        Schema::create('schedules', function (Blueprint $table) {
+            $table->unsignedInteger('ScheduleID')->primary();
             $table->unsignedInteger('RouteID');
+            $table->unsignedInteger('StopID');
             $table->boolean('IsWorkDay');
-            $table->TIME('StartTime');
+            $table->unsignedInteger('Order');
+            $table->TIME('TimeDelta');
             $table->timestamps();
 
             $table->foreign('RouteID')->references('RouteID')->on('routes')->onDelete('cascade');
+            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
         });
     }
 
@@ -27,9 +30,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('runs', function (Blueprint $table) {
+        Schema::table('schedules', function (Blueprint $table) {
             $table->dropForeign(['RouteID']);
+            $table->dropForeign(['StopID']);
         });
-        Schema::dropIfExists('runs');
+        Schema::dropIfExists('schedules');
     }
 };

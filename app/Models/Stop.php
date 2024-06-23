@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Stop extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'StopID';
+    public $incrementing = false;
+    protected $keyType = 'integer';
+    protected $fillable = [
+        'StopID',
+        'Name',
+    ];
+    
 }

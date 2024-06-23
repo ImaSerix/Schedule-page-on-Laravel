@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stops', function (Blueprint $table) {
-            $table->unsignedBigInteger('StopID')->primary();
+            $table->unsignedInteger('StopID')->primary();
+            $table->string('Name');
             $table->timestamps();
         });
     }

@@ -9,13 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    protected $fillable = ['RouteNetworkID', 'Name'];
     public function up(): void
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->integer('RouteID')->primary();
+            $table->unsignedInteger('RouteID')->primary();
+            $table->unsignedInteger('RouteNetworkID');
+            $table->string("Direction");
+            $table->timestamps();
+
             $table->foreign('RouteNetworkID')->references('RouteNetworkID')->on('route_networks')->onDelete('cascade');
-            $table->string("Direction")->nullable();
-            $table->string("Description")->nullable();
         });
     }
 
@@ -24,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('routes', function (Blueprint $table) {
+            $table->dropForeign(['RouteNetworkID']);
+        });
         Schema::dropIfExists('routes');
     }
 };

@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->integer('StopID')->primary();
+            $table->unsignedInteger('StopID')->primary();
+            $table->float('longitude',15,6);
+            $table->float('latitude',15,6);
             $table->timestamps();
+
+            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
         });
     }
 
@@ -22,6 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('locations', function (Blueprint $table) {
+            $table->dropForeign(['StopID']);
+        });
         Schema::dropIfExists('locations');
     }
 };
