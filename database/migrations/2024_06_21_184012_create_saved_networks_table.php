@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('saved_stops', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('StopID');
+        Schema::create('saved_networks', function (Blueprint $table) {
+            $table->foreignId('route_network_id')->constrained('route_networks')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
-            
-            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
+
+            $table->primary(['route_network_id', 'user_id']);
         });
     }
 
@@ -26,9 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('saved_stops', function (Blueprint $table) {
-            $table->dropForeign(['StopID', 'users_id']);
+        Schema::table('saved_networks', function (Blueprint $table) {
+            $table->dropForeign(['stop_id', 'route_network_id']);
         });
-        Schema::dropIfExists('saved_stops');
+        Schema::dropIfExists('saved_networks');
     }
 };

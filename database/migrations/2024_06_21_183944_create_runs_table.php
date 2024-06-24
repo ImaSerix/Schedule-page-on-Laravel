@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('runs', function (Blueprint $table) {
-            $table->id('RunID');
-            $table->unsignedInteger('RouteID');
-            $table->boolean('IsWorkDay');
-            $table->unsignedInteger('StartTime');
+            $table->id();
+            $table->foreignId('route_id')->constrained('routes')->onDelete('cascade');
+            $table->boolean('is_work_day');
+            $table->unsignedInteger('start_time');
             $table->timestamps();
-
-            $table->foreign('RouteID')->references('RouteID')->on('routes')->onDelete('cascade');
         });
     }
 
@@ -28,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('runs', function (Blueprint $table) {
-            $table->dropForeign(['RouteID']);
+            $table->dropForeign(['route_id']);
         });
         Schema::dropIfExists('runs');
     }

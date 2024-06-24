@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('route_networks', function (Blueprint $table) {
-            $table->unsignedInteger('RouteNetworkID')->primary();
-            $table->string("Name")->nullable();
-            $table->string('TransportType');
+            $table->id();
+            $table->string("name");
+            $table->string('transport_type');
             $table->timestamps();
         });
     }

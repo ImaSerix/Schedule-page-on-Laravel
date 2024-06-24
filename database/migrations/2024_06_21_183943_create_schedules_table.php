@@ -12,16 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
-            $table->unsignedInteger('RouteID');
-            $table->unsignedInteger('StopID');
-            $table->boolean('IsWorkDay');
-            $table->unsignedInteger('Order');
-            $table->unsignedInteger('TimeDelta');
+            $table->foreignId('route_id')->constrained('routes')->onDelete('cascade');
+            $table->foreignId('stop_id')->constrained('stops')->onDelete('cascade');
+            $table->boolean('is_work_day');
+            $table->unsignedInteger('order');
+            $table->unsignedInteger('time_delta');
             $table->timestamps();
 
-            $table->primary(['RouteID', 'StopID', 'IsWorkDay', 'Order']);
-            $table->foreign('RouteID')->references('RouteID')->on('routes')->onDelete('cascade');
-            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
+            $table->primary(['route_id', 'stop_id', 'is_work_day', 'order']);
         });
     }
 
@@ -31,8 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->dropForeign(['RouteID']);
-            $table->dropForeign(['StopID']);
+            $table->dropForeign(['route_id']);
+            $table->dropForeign(['stop_id']);
         });
         Schema::dropIfExists('schedules');
     }

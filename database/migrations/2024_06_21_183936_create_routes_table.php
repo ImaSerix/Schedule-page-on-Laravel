@@ -13,12 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->unsignedInteger('RouteID')->primary();
-            $table->unsignedInteger('RouteNetworkID');
-            $table->string("Direction");
+            $table->id();
+            $table->foreignId('route_network_id')->constrained('route_networks')->onDelete('cascade');
+            $table->string("direction");
             $table->timestamps();
-
-            $table->foreign('RouteNetworkID')->references('RouteNetworkID')->on('route_networks')->onDelete('cascade');
         });
     }
 
@@ -28,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('routes', function (Blueprint $table) {
-            $table->dropForeign(['RouteNetworkID']);
+            $table->dropForeign(['route_network_id']);
         });
         Schema::dropIfExists('routes');
     }

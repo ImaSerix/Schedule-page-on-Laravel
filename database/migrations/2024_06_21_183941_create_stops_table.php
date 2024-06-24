@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stops', function (Blueprint $table) {
-            $table->unsignedInteger('StopID')->primary();
-            $table->string('Name');
+            $table->id();
+            $table->string('name');
+            $table->decimal('latitude', 10, 6);
+            $table->decimal('longitude',10,6);
             $table->timestamps();
         });
     }

@@ -9,12 +9,12 @@ class Run extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'RouteID',
-        'IsWorkDay',
-        'StartTime',
+        'route_id',
+        'is_work_day',
+        'start_time',
     ];
     public function route()
     {
-        return $this->belongsTo(Route::class, 'RouteID', 'RouteID');
+        return $this->belongsTo(Route::class, 'route_id', 'id');
     }
 }

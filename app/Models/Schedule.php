@@ -8,23 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
-    protected $primaryKey = ['RouteID', 'StopID'];
-    public $incrementing = false;
-    protected $keyType = 'composite';
     protected $fillable = [
-        'RouteID',
-        'StopID',
-        'IsWorkDay',
-        'Order',
-        'TimeDelta',
+        'route_id',
+        'stop_id',
+        'is_work_day',
+        'order',
+        'time_delta',
     ];
     use HasFactory;
     public function stop()
     {
-        return $this->belongsTo(Stop::class, 'StopID', 'StopID');
+        return $this->belongsTo(Stop::class, 'stop_id', 'id');
     }
     public function route()
     {
-        return $this->belongsTo(Stop::class, 'RouteID', 'RouteID');
+        return $this->belongsTo(Stop::class, 'route_id', 'id');
     }
 }

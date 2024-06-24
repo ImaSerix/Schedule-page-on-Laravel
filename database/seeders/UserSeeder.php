@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Hash;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UsersSavedStopsSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Seed the application's database.

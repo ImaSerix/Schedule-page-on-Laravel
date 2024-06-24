@@ -11,7 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //$this->call(SatiksmeSeeder::class);
-        $this->call(UsersSavedStopsSeeder::class);
+        $this->call(SatiksmeSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(SavedNetworksSeeder::class);
     }
 }

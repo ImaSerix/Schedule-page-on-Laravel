@@ -75,7 +75,7 @@ class SatiksmeSeeder extends Seeder
         $station = $stations[0];
         $res = array();
         array_push($res, array('sid' =>$station->sid, 'name' => $station->name, 
-                                                        'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lat), 
+                                                        'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lng), 
                                                         'schedule' => array()));
         foreach (array_slice ($station->$key, $i) as $run => $time) 
         {
@@ -92,7 +92,7 @@ class SatiksmeSeeder extends Seeder
             $timeInMinutes = $exp[0] * 60 + $exp[1];
             if ($order != 0 && end($res)['schedule'] > $timeInMinutes) $timeInMinutes = 24 * 60 + $exp[1];
             array_push($res, array('sid' =>$station->sid, 'name' => $station->name, 
-                                                            'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lat), 
+                                                            'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lng), 
                                                             'schedule' => $timeInMinutes));
         }
         
@@ -104,28 +104,28 @@ class SatiksmeSeeder extends Seeder
         $html = (string) $response->getBody();
         $stationsToInsert = $this->getShedule($data, $this->getVar($html));
         //return;
-        RouteNetwork::firstOrCreate(['RouteNetworkID' => $data['web']], ['Name' => $data['name'], 'TransportType' => $data['type']]);
-        Route::firstOrCreate(['RouteID' => $data['web'] * 10 + $data['id']], ['RouteNetworkID' => $data['web'], 'Direction' => $data['dest']]);
+        $routeNetwork = RouteNetwork::firstOrCreate(['name' => $data['name'], 'transport_type' => $data['type']]);
+        $route = Route::firstOrCreate(['route_network_id' => $routeNetwork->id, 'direction' => $data['dest']]);
         foreach(array('wtlist', 'htlist') as $listKey)
         {
             $prevTime = $stationsToInsert[$listKey][0]['schedule'][0];
             foreach($stationsToInsert[$listKey] as $order => $station)
             {
-                Stop::firstOrCreate(['StopID' => $station['sid']], ['Name' => $station['name']]);
-                Location::firstOrCreate(['StopID' => $station['sid']], ['Latitude' => $station['geo']['lat'], 'Longitude' => $station['geo']['lng']]);
+                $stop = Stop::firstOrCreate(['name' => $station['name'], 'latitude' => $station['geo']['lat'], 'longitude' => $station['geo']['lng']]);
+                //Location::firstOrCreate(['$stop_id' => $stop->id], ['latitude' => $station['geo']['lat'], 'longitude' => $station['geo']['lng']]);
                 if ($order == 0) 
                 {
                     foreach($station['schedule'] as $run => $time)
                     {
-                        if ($run == 0) Schedule::create(['RouteID' => $data['web'] * 10 + $data['id'], 'StopID' =>$station['sid'], 
-                                                        'IsWorkDay' => $listKey == 'wtlist', 'Order' => $order, 'TimeDelta' => 0]);
-                        Run::create(['RouteID' => $data['web'] * 10 + $data['id'], 
-                                    'IsWorkDay' => $listKey == 'wtlist', 'StartTime' =>$time]);
+                        if ($run == 0) Schedule::create(['route_id' => $route->id, 'stop_id' =>$stop->id, 
+                                                        'is_work_day' => $listKey == 'wtlist', 'order' => $order, 'time_delta' => 0]);
+                        Run::create(['route_id' => $route->id, 
+                                    'is_work_day' => $listKey == 'wtlist', 'start_time' =>$time]);
                     }
                     continue;
                 }
-                Schedule::create(['RouteID' => $data['web'] * 10 + $data['id'], 'StopID' =>$station['sid'], 
-                                'IsWorkDay' => $listKey == 'wtlist', 'Order' => $order, 'TimeDelta' => $station['schedule'] - $prevTime]);
+                Schedule::create(['route_id' => $route->id, 'stop_id' =>$stop->id, 
+                                'is_work_day' => $listKey == 'wtlist', 'order' => $order, 'time_delta' => $station['schedule'] - $prevTime]);
                 $prevTime = $station['schedule'];
             }
         }

@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->unsignedInteger('StopID')->primary();
-            $table->float('Latitude',15,6);
-            $table->float('Longitude',15,6);
+            $table->foreignId('stop_id')->constrained('stops')->onDelete('cascade');
+            $table->float('latitude',15,6);
+            $table->float('longitude',15,6);
             $table->timestamps();
-
-            $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
+            $table->primary('stop_id');
         });
     }
 
@@ -27,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('locations', function (Blueprint $table) {
-            $table->dropForeign(['StopID']);
+            $table->dropForeign(['stop_id']);
         });
         Schema::dropIfExists('locations');
     }
