@@ -17,7 +17,7 @@ use Illuminate\Database\Seeder;
 
 use function PHPSTORM_META\type;
 
-class SatiksmeSeeader extends Seeder
+class SatiksmeSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -39,7 +39,10 @@ class SatiksmeSeeader extends Seeder
         ['web'=> 5, 'name'=> '19', 'id'=> 2, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 88596, 'dest'=>'c-d', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
         ['web'=> 5, 'name'=> '19', 'id'=> 3, 'type'=>'bus', 'fromSid'=> 88596, 'toSid'=> 9057, 'dest'=>'d-c', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska'],
         ['web'=> 5, 'name'=> '19', 'id'=> 4, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'c-a', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska']);
-        $this->makeDB($dataList[0]);
+        foreach($dataList as $i => $data) {
+            echo round($i / count($dataList) * 100).'% ';
+            $this->makeDB($data);
+        };
     }
     //get routeData from HTML document
     private function getVar($html){
@@ -54,28 +57,77 @@ class SatiksmeSeeader extends Seeder
         return $routeData;
     }
     //Chose a part of the routeData array, which needed
-    private function getPartOfArray($data, $routeData){
-        $res = array();
+    private function getShedule($data, $routeData){
+        $partOfSchedule = array();
         $copy = false;
         foreach($routeData->stations as $station){
             if ($station->number == $data['name'] and (int) ($station->sid) == $data['fromSid']) $copy = true;
-            if ($copy) array_push($res, $station);
-            if ($station->number == $data['name'] and (int) ($station->sid) == $data['toSid']) return $res;
+            if ($copy) array_push($partOfSchedule, $station);
+            if ($station->number == $data['name'] and (int) ($station->sid) == $data['toSid']) break;
         }
-        return $res;
+        $schedule = ['wtlist' => $this->bestRow($partOfSchedule, 'wtlist'), 'htlist' => $this->bestRow($partOfSchedule, 'htlist')];
+        return $schedule;
     }
     //Chose row, which have all "time" fields full
     private function bestRow($stations, $key){
         $i = 0;
-        foreach($stations as $station) foreach(array_slice ($station->$key, $i) as $schedule) if(!strpos($schedule, ':')) $i++; else break; 
-        return $i;
+        foreach($stations as $station) foreach(array_slice ($station->$key, $i) as $time) if(!strpos($time, ':')) $i++; else break; 
+        $station = $stations[0];
+        $res = array();
+        array_push($res, array('sid' =>$station->sid, 'name' => $station->name, 
+                                                        'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lat), 
+                                                        'schedule' => array()));
+        foreach (array_slice ($station->$key, $i) as $run => $time) 
+        {
+            if ($time != '-'){
+                $exp = explode(':', $time);
+                $timeInMinutes = $exp[0] * 60 + $exp[1];
+                if ($run != 0 && end($res[0]['schedule']) > $timeInMinutes) $timeInMinutes = 24 * 60 + $exp[1];
+                array_push($res[0]['schedule'], $timeInMinutes);
+            }
+        }
+        foreach(array_slice ($stations, 1) as $order => $station) 
+        {
+            $exp = explode(':', $station->$key[$i]);
+            $timeInMinutes = $exp[0] * 60 + $exp[1];
+            if ($order != 0 && end($res)['schedule'] > $timeInMinutes) $timeInMinutes = 24 * 60 + $exp[1];
+            array_push($res, array('sid' =>$station->sid, 'name' => $station->name, 
+                                                            'geo' => array('lat' => $station->geo->lat, 'lng' => $station->geo->lat), 
+                                                            'schedule' => $timeInMinutes));
+        }
+        
+        return $res;
     }
     private function makeDB($data){
         $client = new Client();
         $response = $client->get($data['url']);
         $html = (string) $response->getBody();
-        $stationsToInsert = $this->getPartOfArray($data, $this->getVar($html));
-        $targetRow = $this->bestRow($stationsToInsert, 'wtlist');
-        RouteNetwork::create(['RouteNetworkID' => $data['web'], 'Name' => $data['name']]);
-    }
+        $stationsToInsert = $this->getShedule($data, $this->getVar($html));
+        //return;
+        RouteNetwork::firstOrCreate(['RouteNetworkID' => $data['web']], ['Name' => $data['name'], 'TransportType' => $data['type']]);
+        Route::firstOrCreate(['RouteID' => $data['web'] * 10 + $data['id']], ['RouteNetworkID' => $data['web'], 'Direction' => $data['dest']]);
+        foreach(array('wtlist', 'htlist') as $listKey)
+        {
+            $prevTime = $stationsToInsert[$listKey][0]['schedule'][0];
+            foreach($stationsToInsert[$listKey] as $order => $station)
+            {
+                Stop::firstOrCreate(['StopID' => $station['sid']], ['Name' => $station['name']]);
+                Location::firstOrCreate(['StopID' => $station['sid']], ['Latitude' => $station['geo']['lat'], 'Longitude' => $station['geo']['lng']]);
+                if ($order == 0) 
+                {
+                    foreach($station['schedule'] as $run => $time)
+                    {
+                        if ($run == 0) Schedule::create(['RouteID' => $data['web'] * 10 + $data['id'], 'StopID' =>$station['sid'], 
+                                                        'IsWorkDay' => $listKey == 'wtlist', 'Order' => $order, 'TimeDelta' => 0]);
+                        Run::create(['RouteID' => $data['web'] * 10 + $data['id'], 
+                                    'IsWorkDay' => $listKey == 'wtlist', 'StartTime' =>$time]);
+                    }
+                    continue;
+                }
+                Schedule::create(['RouteID' => $data['web'] * 10 + $data['id'], 'StopID' =>$station['sid'], 
+                                'IsWorkDay' => $listKey == 'wtlist', 'Order' => $order, 'TimeDelta' => $station['schedule'] - $prevTime]);
+                $prevTime = $station['schedule'];
+            }
+        }
+    }  
 }

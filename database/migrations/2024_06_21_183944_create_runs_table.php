@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('runs', function (Blueprint $table) {
-            $table->unsignedInteger('RunID')->primary();
+            $table->id('RunID');
             $table->unsignedInteger('RouteID');
             $table->boolean('IsWorkDay');
-            $table->TIME('StartTime');
+            $table->unsignedInteger('StartTime');
             $table->timestamps();
 
             $table->foreign('RouteID')->references('RouteID')->on('routes')->onDelete('cascade');

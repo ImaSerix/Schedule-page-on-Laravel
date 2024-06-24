@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
-            $table->unsignedInteger('ScheduleID')->primary();
             $table->unsignedInteger('RouteID');
             $table->unsignedInteger('StopID');
             $table->boolean('IsWorkDay');
             $table->unsignedInteger('Order');
-            $table->TIME('TimeDelta');
+            $table->unsignedInteger('TimeDelta');
             $table->timestamps();
 
+            $table->primary(['RouteID', 'StopID', 'IsWorkDay', 'Order']);
             $table->foreign('RouteID')->references('RouteID')->on('routes')->onDelete('cascade');
             $table->foreign('StopID')->references('StopID')->on('stops')->onDelete('cascade');
         });

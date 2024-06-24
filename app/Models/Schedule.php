@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'ScheduleID';
+    protected $primaryKey = ['RouteID', 'StopID'];
     public $incrementing = false;
-    protected $keyType = 'integer';
+    protected $keyType = 'composite';
     protected $fillable = [
         'RouteID',
         'StopID',
@@ -22,5 +22,9 @@ class Schedule extends Model
     public function stop()
     {
         return $this->belongsTo(Stop::class, 'StopID', 'StopID');
+    }
+    public function route()
+    {
+        return $this->belongsTo(Stop::class, 'RouteID', 'RouteID');
     }
 }

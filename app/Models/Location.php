@@ -13,8 +13,8 @@ class Location extends Model
     protected $keyType = 'integer';
     protected $fillable = [
         'StopID',
-        'longitude',
-        'latitude',
+        'Longitude',
+        'Latitude',
     ];
 
     public function stop()
