@@ -20,5 +20,11 @@ class UserSeeder extends Seeder
             'email' => 'imants@zvidris.lv',
             'role' => 'admin',
             'password' => Hash::make('kasIko123'),]);
+        foreach (User::all() as $user){
+            $user->settings()->create([
+                'user_id' => $user->id,
+                'settings' => json_encode(array('tab_order' => array('All', 'bus', 'tram', 'saved'))),
+            ]);
+        }
     }
 }

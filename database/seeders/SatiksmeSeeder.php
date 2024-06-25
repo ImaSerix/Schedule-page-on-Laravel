@@ -2,20 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Location;
 use App\Models\Route;
 use App\Models\RouteNetwork;
 use App\Models\Run;
-use App\Models\SavedStop;
 use App\Models\Schedule;
 use App\Models\Stop;
-use App\Models\User;
 use DOMDocument;
 use DOMXPath;
 use GuzzleHttp\Client;
 use Illuminate\Database\Seeder;
-
-use function PHPSTORM_META\type;
 
 class SatiksmeSeeder extends Seeder
 {
@@ -24,21 +19,21 @@ class SatiksmeSeeder extends Seeder
      */
     public function run(): void
     {
-        $dataList = array (['web' => 1, 'name' => '1', 'id'=> 0, 'type'=>'tram', 'fromSid'=> 71017, 'toSid'=> 71035, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/tramvajs-nr-1-butlerova-iela-stacija'],
-        ['web'=> 1, 'name'=> '1', 'id'=> 1, 'type'=>'tram', 'fromSid'=> 7279, 'toSid'=> 7280, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/tramvajs-nr-1-stacija-butlerova-iela'],
-        ['web'=> 2, 'name'=> '2', 'id'=> 0, 'type'=>'tram', 'fromSid'=> 71017, 'toSid'=> 71026, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/lv-tramvajs-nr-2-butlerova-iela-maizes-kombinats'],
-        ['web'=> 2, 'name'=> '2', 'id'=> 1, 'type'=>'tram', 'fromSid'=> 8482, 'toSid'=> 7280, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/lv-tramvajs-nr-2-maizes-kombinats-butlerova-iela'],
-        ['web'=> 3, 'name'=> '17A', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 18149, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr-17a-autoosta-csdd-jaunforstadte'],
-        ['web'=> 3, 'name'=> '17A', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-17a-jaunforstadte-csdd-autoosta'],
-        ['web'=> 4, 'name'=> '20B', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 9057, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats'],
-        ['web'=> 4, 'name'=> '20B', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 88597, 'dest'=>'b-c', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats'],
-        ['web'=> 4, 'name'=> '20B', 'id'=> 2, 'type'=>'bus', 'fromSid'=> 88597, 'toSid'=> 9057, 'dest'=>'c-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats-no-ciolkovska'],
-        ['web'=> 4, 'name'=> '20B', 'id'=> 3, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats-no-ciolkovska'],
-        ['web'=> 5, 'name'=> '19', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 18164, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
-        ['web'=> 5, 'name'=> '19', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 18164, 'toSid'=> 9057, 'dest'=>'b-c', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
-        ['web'=> 5, 'name'=> '19', 'id'=> 2, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 88596, 'dest'=>'c-d', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
-        ['web'=> 5, 'name'=> '19', 'id'=> 3, 'type'=>'bus', 'fromSid'=> 88596, 'toSid'=> 9057, 'dest'=>'d-c', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska'],
-        ['web'=> 5, 'name'=> '19', 'id'=> 4, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'c-a', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska']);
+        $dataList = array (['web' => 1, 'name' => '1', 'description' => 'Butļerova iela - Stacija', 'id'=> 0, 'type'=>'tram', 'fromSid'=> 71017, 'toSid'=> 71035, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/tramvajs-nr-1-butlerova-iela-stacija'],
+        ['web'=> 1, 'name'=> '1', 'description' => 'Butļerova iela - Stacija', 'id'=> 1, 'type'=>'tram', 'fromSid'=> 7279, 'toSid'=> 7280, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/tramvajs-nr-1-stacija-butlerova-iela'],
+        ['web'=> 2, 'name'=> '2', 'description' => 'Butļerova iela - Maizes kombināts', 'id'=> 0, 'type'=>'tram', 'fromSid'=> 71017, 'toSid'=> 71026, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/lv-tramvajs-nr-2-butlerova-iela-maizes-kombinats'],
+        ['web'=> 2, 'name'=> '2', 'description' => 'Butļerova iela - Maizes kombināts', 'id'=> 1, 'type'=>'tram', 'fromSid'=> 8482, 'toSid'=> 7280, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/lv-tramvajs-nr-2-maizes-kombinats-butlerova-iela'],
+        ['web'=> 3, 'name'=> '17A', 'description' => 'Autoosta – CSDD – Jaunā Forštate', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 18149, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr-17a-autoosta-csdd-jaunforstadte'],
+        ['web'=> 3, 'name'=> '17A', 'description' => 'Autoosta – CSDD – Jaunā Forštate', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-17a-jaunforstadte-csdd-autoosta'],
+        ['web'=> 4, 'name'=> '20B', 'description' => 'Jaunā Forštate – Smiltenes iela – Jaunbūve – Ķīmija', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 9057, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats'],
+        ['web'=> 4, 'name'=> '20B', 'description' => 'Jaunā Forštate – Smiltenes iela – Jaunbūve – Ķīmija', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 88597, 'dest'=>'b-c', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats'],
+        ['web'=> 4, 'name'=> '20B', 'description' => 'Jaunā Forštate – Smiltenes iela – Jaunbūve – Ķīmija', 'id'=> 2, 'type'=>'bus', 'fromSid'=> 88597, 'toSid'=> 9057, 'dest'=>'c-b', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats-no-ciolkovska'],
+        ['web'=> 4, 'name'=> '20B', 'description' => 'Jaunā Forštate – Smiltenes iela – Jaunbūve – Ķīmija', 'id'=> 3, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'b-a', 'url'=> 'https://satiksme.daugavpils.lv/autobuss-nr20b-jaunforstadte-smiltenes-jaunbuve-kimiku-ciemats-no-ciolkovska'],
+        ['web'=> 5, 'name'=> '19', 'description' => 'Jaunā Forštate – Ķīmija – Jaunbūve – Jaunā Forštate', 'id'=> 0, 'type'=>'bus', 'fromSid'=> 8768, 'toSid'=> 18164, 'dest'=>'a-b', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
+        ['web'=> 5, 'name'=> '19', 'description' => 'Jaunā Forštate – Ķīmija – Jaunbūve – Jaunā Forštate', 'id'=> 1, 'type'=>'bus', 'fromSid'=> 18164, 'toSid'=> 9057, 'dest'=>'b-c', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
+        ['web'=> 5, 'name'=> '19', 'description' => 'Jaunā Forštate – Ķīmija – Jaunbūve – Jaunā Forštate', 'id'=> 2, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 88596, 'dest'=>'c-d', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte'],
+        ['web'=> 5, 'name'=> '19', 'description' => 'Jaunā Forštate – Ķīmija – Jaunbūve – Jaunā Forštate', 'id'=> 3, 'type'=>'bus', 'fromSid'=> 88596, 'toSid'=> 9057, 'dest'=>'d-c', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska'],
+        ['web'=> 5, 'name'=> '19', 'description' => 'Jaunā Forštate – Ķīmija – Jaunbūve – Jaunā Forštate', 'id'=> 4, 'type'=>'bus', 'fromSid'=> 9057, 'toSid'=> 18036, 'dest'=>'c-a', 'url'=> 'https://satiksme.daugavpils.lv/lv-autobuss-nr-19-jaunforstadte-kimiku-ciemats-jaunbuve-jaunforstadte-ciolkovska']);
         foreach($dataList as $i => $data) {
             echo round($i / count($dataList) * 100).'% ';
             $this->makeDB($data);
@@ -104,7 +99,7 @@ class SatiksmeSeeder extends Seeder
         $html = (string) $response->getBody();
         $stationsToInsert = $this->getShedule($data, $this->getVar($html));
         //return;
-        $routeNetwork = RouteNetwork::firstOrCreate(['name' => $data['name'], 'transport_type' => $data['type']]);
+        $routeNetwork = RouteNetwork::firstOrCreate(['name' => $data['name'], 'transport_type' => $data['type'], 'description' => $data['description']]);
         $route = Route::firstOrCreate(['route_network_id' => $routeNetwork->id, 'direction' => $data['dest']]);
         foreach(array('wtlist', 'htlist') as $listKey)
         {

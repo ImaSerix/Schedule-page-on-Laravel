@@ -11,5 +11,6 @@ class RouteNetwork extends Model
     protected $fillable = [
         'name',
         'transport_type',
+        'description'
     ];
 }

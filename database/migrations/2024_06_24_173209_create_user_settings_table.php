@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('route_networks', function (Blueprint $table) {
-            $table->id();
-            $table->string("name");
-            $table->string('transport_type');
-            $table->string('description');
+        Schema::create('user_settings', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->json('settings')->nullable();
             $table->timestamps();
+
+            $table->primary('user_id');
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('route_networks');
+        Schema::dropIfExists('user_settings');
     }
 };

@@ -1,0 +1,135 @@
+body {
+    font-family: Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    background: #f3f3f3;
+    border-bottom: 5px solid #ddd;
+    position: sticky;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#language-switcher a, .profile a {
+    margin-left: 10px;
+    color: #333;
+    text-decoration: none;
+}
+#language-switcher .selected{
+    background: #f8f9fa;
+}
+#language-switcher a:hover, .profile a:hover {
+    text-decoration: underline;
+}
+
+
+main {
+    width: 1000px;
+    align-self: center;
+    margin:auto;
+    margin-top: 60px; /* Adjust based on header height */
+    box-sizing: border-box;
+}
+.content-header{
+    font-size: 30px;
+    color:#a22821;
+}
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.nav div {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: left;
+    gap: 1px;
+    border-bottom: 2px solid #a22821;
+}
+
+.nav div button {
+    color:white;
+    border: 0;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #cfc1c1;
+    width: 140px;
+    padding: 20px;
+}
+
+.nav div button:hover {
+    background-color: #e5b400;
+}
+.nav div button.selected{
+    background-color: #a22821;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+#content-networks{
+    list-style: none;
+    width: 100%;
+    padding: 0;
+}
+
+#content-networks li:nth-child(2n - 1){
+    background-color: #eeeeee;
+}
+#content-networks p::before{
+    width: 25px;
+    height: 25px;
+    background-color: #333;
+}
+#content-networks img{
+    display: inline-block;
+    margin-right: 20px;
+    width: 40px;
+    height: 40px;
+}
+#content-networks p{
+    margin:0;
+    margin-right: 20px;
+    width: 30px;
+    height: 20px;
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #a22821;
+    color:white;
+    text-align: center;
+    align-self: center;
+    display: inline-block;
+}
+#content-networks li{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.saved-star{
+    position: absolute;
+    right: 0;
+}
+
