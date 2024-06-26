@@ -22,20 +22,38 @@ body {
     justify-content: space-between;
     width: 100%;
 }
-
+#language-switcher{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #language-switcher a, .profile a {
     margin-left: 10px;
     color: #333;
     text-decoration: none;
 }
 #language-switcher .selected{
-    background: #f8f9fa;
+    color: #a22821;
 }
 #language-switcher a:hover, .profile a:hover {
     text-decoration: underline;
 }
 
-
+.profile{
+    display: flex;
+    align-items: center;
+}
+.profile p{
+    padding: 5px;
+}
+.profile button{
+    border: none;
+    font-size: 17px;
+}
+.profile button:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
 main {
     width: 1000px;
     align-self: center;

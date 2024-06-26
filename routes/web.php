@@ -6,32 +6,40 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\SavedNetworkController;
 use App\Http\Controllers\TabController;
+use App\Http\Controllers\SheduleController;
+use App\Http\Controllers\RunsController;
+
 
 
 Route::get('/', function () {
     return view('satiksme/main');
 });
 
-Route::get('/schedule', function(){
-    return view('satiksme/schedule');
-});
+Route::get('/schedule/{network_id}', [SheduleController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('lang/{locale}', [LocalizationController::class, 'switch'])->name('lang.switch');
+Route::post('/runs', [RunsController::class, 'store'])->name('run.store');
+Route::delete('/runs', [RunsController::class, 'delete'])->name('run.delete');
 
+
+Route::get('lang/{locale}', [LocalizationController::class, 'switch'])->name('lang.switch');
 
 Route::get('api/settings/tabs', [UserSettingController::class, 'getTabOrder']);
 Route::post('api/settings/tabs', [UserSettingController::class, 'saveTabOrder']);
 Route::get('api/translate/{phrase}', [LocalizationController::class, 'translate']);
 
-Route::get('api/savedNetworks', [SavedNetworkController::class, 'savedNetworks']);
-Route::get('api/saveNetwork/{network}', [SavedNetworkController::class, 'saveNetwork']);
-Route::get('api/unSaveNetwork/{network}', [SavedNetworkController::class, 'unSaveNetwork']);
+Route::get('api/savedNetworks', [SavedNetworkController::class, 'read']);
+Route::post('saveNetwork', [SavedNetworkController::class, 'store']);
+Route::delete('api/unSaveNetwork/{network}', [SavedNetworkController::class, 'delete']);
 
+Route::put('/schedule', [SheduleController::class, 'update'])->name('schedule.update');
 
+Route::get('/api/route/{routeID}/stops', [SheduleController::class, 'getStops']);
+Route::get('/api/stops/{routeID}/{isWorkDay}/startTimes', [SheduleController::class, 'getStartTimes']);
+Route::get('/api/stops/{routeID}/{isWorkDay}/schedule', [SheduleController::class, 'getSheduleForStop']);
 
 Route::get('api/tab/{tab}', [TabController::class, 'getTab']);
 

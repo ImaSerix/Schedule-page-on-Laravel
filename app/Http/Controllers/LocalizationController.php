@@ -19,7 +19,7 @@ class LocalizationController extends Controller
         
         Session::put('locale', $locale);
         App::setLocale($locale);
-        return redirect('/');
+        return redirect()->back();
     }
     public function translate($phrase){
         $translation = Lang::get('messages.'.$phrase);

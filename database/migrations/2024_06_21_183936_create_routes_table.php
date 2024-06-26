@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('route_network_id')->constrained('route_networks')->onDelete('cascade');
             $table->string("direction");
+            $table->string("description");
             $table->timestamps();
         });
     }

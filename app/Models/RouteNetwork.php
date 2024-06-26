@@ -13,4 +13,7 @@ class RouteNetwork extends Model
         'transport_type',
         'description'
     ];
+    public function routes(){
+        return $this->hasMany(Route::class, 'route_network_id', 'id');
+    }
 }

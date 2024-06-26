@@ -1,55 +1,29 @@
 $(document).ready(function() {
-    $.get('api/settings/tabs', function(data) {
-        if (data.tab_order.length > 0) applyTabOrder(data.tab_order);
-        $('#tabs').children(':first')[0].classList.add('selected');
-        if (window.location.hash) makeNetworkList(window.location.hash);
+    $('#tabs').children().on('click', function(e) {
+        $('#tabs').children('.selected')[0].classList.remove('selected');
+        e.target.classList.add('selected');
     });
-    $('#save-tab-order').on('click', function() {
-        var tabOrder = getTabOrder(); 
-        $.ajax({
-            url: 'api/settings/tabs',
-            method: 'POST',
-            data: {
-                tab_order: tabOrder,
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                alert('Tab order saved!');
-            }
-        });
+    if (window.location.hash){
+        console.log(window.location.hash.substring(1));
+        $('#'+ window.location.hash.substring(1))[0].classList.add('selected');
+        makeNetworkList(window.location.hash);
+    }
+    else window.location.hash = 'all';
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 });
-function getTabOrder(){
-    var order = [];
-    $('#tabs .tab').each(function() {
-        order.push($(this).data('tab'));
-    });
-    return order;
-}
-function applyTabOrder(order){
-    var container = $('#tabs');
-    container.empty();
-    order.forEach(function(tab){
-        var button = document.createElement('button');
-        button.id = tab.toLowerCase();
-        button.addEventListener('click', function(e){
-            window.location.hash = e.target.id;
-            e.preventDefault();
-        })
-        $.get('api/translate/' + tab, function(data) {
-            button.textContent = data;
-        });
-        container.append(button);
-    });
-    if (!window.location.hash) window.location.hash = container.children(':first')[0].id;
-}
 function addNetworks(data){
     var savedNetworks = {'auth': false, 'networks': []};
     var networksContainer = $('#content-networks');
 
-    fetch('api/savedNetworks/')
-        .then(response => response.json())
-        .then(dataSavedNetworks => {
+    $.ajax({
+        url: 'api/savedNetworks/',
+        method: 'GET',
+        dataType: "json",
+        success: function(dataSavedNetworks){
             if (dataSavedNetworks['auth']){
                 savedNetworks['auth'] = true;
                 dataSavedNetworks['saved'].forEach(network =>{
@@ -70,11 +44,25 @@ function addNetworks(data){
                         imgSaved.addEventListener('click', function(e) {
                             let networkID = e.target.parentElement.dataset.networkId;
                             if (e.target.getAttribute('src') == 'img/star-empty.png') {
-                                fetch('api/saveNetwork/' + networkID).then(response => response.json());
+                                $.ajax({
+                                    url: 'saveNetwork',
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        network_id: networkID,
+                                    }),
+                                    error: function(e){
+                                        console.log(e);
+                                    }
+                                })
                                 e.target.setAttribute('src', 'img/star-yellow.png');
                             }
                             else {
-                                fetch('api/unSaveNetwork/' + networkID).then(response => response.json());
+                                $.ajax({
+                                    url: 'api/unSaveNetwork/' + networkID,
+                                    method: 'DELETE',
+                                    dataType: "json",
+                                })
                                 e.target.setAttribute('src', 'img/star-empty.png');
                                 if ($('#tabs').children('.selected')[0].id == 'saved') e.target.parentElement.remove();
                             }
@@ -86,14 +74,62 @@ function addNetworks(data){
                     p.textContent = element['name'];
                     a.textContent = element ['description'];
                     a.id = element['name'] + '-' + element['transport_type'];
-                    a.setAttribute('href', '/schedule'+ '#' + element['transport_type'] + '/' + element['name']);
+                    a.setAttribute('href', '/schedule/'+ element['id']);
                     li.appendChild(imgTrans);
                     li.appendChild(p);
                     li.appendChild(a);
                     li.classList.add(element['transport_type']);
                     networksContainer.append(li);
                 });
-        });
+        }
+    })      
+        // fetch('api/savedNetworks/')
+        // .then(response => response.json())
+        // .then(dataSavedNetworks => {
+        //     if (dataSavedNetworks['auth']){
+        //         savedNetworks['auth'] = true;
+        //         dataSavedNetworks['saved'].forEach(network =>{
+        //             savedNetworks.networks.push(network['route_network_id']);
+        //         })
+        //     }
+        //         networksContainer.empty();
+        //         data.forEach(element => {
+        //             var li = document.createElement('li');
+        //             li.setAttribute('data-network-id', element['id']);
+        //             var imgTrans = document.createElement('img');
+        //             var a = document.createElement('a');
+        //             var p = document.createElement('p');
+        //             if (savedNetworks.auth){
+        //                 var imgSaved = document.createElement('img');
+        //                 if (savedNetworks.networks.includes(element['id'])) imgSaved.setAttribute('src', 'img/star-yellow.png');
+        //                 else imgSaved.setAttribute('src', 'img/star-empty.png');
+        //                 imgSaved.addEventListener('click', function(e) {
+        //                     let networkID = e.target.parentElement.dataset.networkId;
+        //                     if (e.target.getAttribute('src') == 'img/star-empty.png') {
+        //                         fetch('api/saveNetwork/' + networkID).then(response => response.json());
+        //                         e.target.setAttribute('src', 'img/star-yellow.png');
+        //                     }
+        //                     else {
+        //                         fetch('api/unSaveNetwork/' + networkID).then(response => response.json());
+        //                         e.target.setAttribute('src', 'img/star-empty.png');
+        //                         if ($('#tabs').children('.selected')[0].id == 'saved') e.target.parentElement.remove();
+        //                     }
+        //                 })
+        //                 imgSaved.classList.add('saved-star');
+        //                 li.appendChild(imgSaved);
+        //             }
+        //             imgTrans.setAttribute('src', '/img/' + element['transport_type'] + '.png');
+        //             p.textContent = element['name'];
+        //             a.textContent = element ['description'];
+        //             a.id = element['name'] + '-' + element['transport_type'];
+        //             a.setAttribute('href', '/schedule/'+ element['id']);
+        //             li.appendChild(imgTrans);
+        //             li.appendChild(p);
+        //             li.appendChild(a);
+        //             li.classList.add(element['transport_type']);
+        //             networksContainer.append(li);
+        //         });
+        // });
     
 }; 
 function makeNetworkList (hash){

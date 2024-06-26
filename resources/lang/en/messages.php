@@ -1,9 +1,21 @@
 <?php
     return [
         'Login' => 'Login',
+        'password' => 'Password',
+        'email' => 'Email',
+        'rememberMe' => 'Remember me',
         'All' => 'All',
         'bus' => 'Buses',
         'tram' => 'Trams',
         'saved' => 'Saved',
         'Daugavpils timetable' => 'Daugavpils timetable',
+        'holiDay' => 'Holiday',
+        'workDay' => 'Workday',
+        'hello' => 'Hello',
+        'AdminPanel' => 'Admin panel',
+        'AddRouteStartTime' => 'Add route start time',
+        'AddNewStop' => 'Add new stop',
+        'newStartTime' => 'Start time (in minutes):',
+        'add' => 'Add',
+        'isWorkDay' => 'Work day?',
     ];

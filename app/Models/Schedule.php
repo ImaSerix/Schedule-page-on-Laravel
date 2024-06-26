@@ -22,6 +22,6 @@ class Schedule extends Model
     }
     public function route()
     {
-        return $this->belongsTo(Stop::class, 'route_id', 'id');
+        return $this->belongsTo(Route::class, 'route_id', 'id');
     }
 }
