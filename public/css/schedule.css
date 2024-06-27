@@ -90,7 +90,7 @@ main {
     border-bottom: 2px solid #a22821;
 }
 
-.nav div button {
+.nav button {
     color:white;
     border: 0;
     text-transform: uppercase;
@@ -100,8 +100,9 @@ main {
     padding: 20px;
 }
 
-.nav div button:hover {
+.nav button:hover {
     background-color: #e5b400;
+    cursor:pointer;
 }
 .content{
     padding: 20px;
@@ -192,4 +193,22 @@ main {
     display: grid;
     grid-auto-flow: row;
     grid-template-columns: 1fr 1fr;
+}
+
+#admin-tools div{
+    padding: 5px;
+}
+#admin-tools p{
+    color:#a22821;
+    font-weight: bold;
+}
+#admin-tools form{
+    display: flex;
+    flex-direction: column;
+}
+#admin-tools label{
+    margin-top: 5px;
+}
+#admin-tools button{
+    margin-top: 5px;
 }

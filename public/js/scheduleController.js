@@ -17,6 +17,7 @@ $(document).ready(function() {
             data:$('#starttime-form').serialize(),
             success: function(){
                 handleHashChange(window.location.hash);
+                fillRunSelector();
             }
         });
     });

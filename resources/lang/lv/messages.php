@@ -2,6 +2,7 @@
     return [
         'Login' => 'Pieslēgties',
         'password' => 'Parole',
+        'Name' => 'Vārds',
         'email' => 'E-adrese',
         'rememberMe' => 'Atcerēties mani',
         'All' => 'Visi',
@@ -17,5 +18,15 @@
         'AddNewStop' => 'Pievienot jaunu pieturvietu',
         'newStartTime' => 'Sākuma laiks (minutēs):',
         'add' => 'Pievienot',
-        'isWorkDay' => 'Ir darbdiena?'
+        'isWorkDay' => 'Izmainīt priekš',
+        'Register' => 'Reģistrēties',
+        'UpdateDeltaTime' => 'Izmainīt laiku līdz pieturai',
+        'stop' => 'Pietura',
+        'timeDelta'=> 'laiks līdz pieturai',
+        'DeleteDeltaTime' => 'Izdzēst maršruta sākuma laiku',
+        'delete' => 'Izdzēst',
+        'change' => 'Izmainīt',
+        'ConfirmPassword' => 'Apstiprināt paroli',
+        'AlreadyRegistered' => 'Jau reģistrēti?',
+        'Logout' => 'Iziet',
     ];

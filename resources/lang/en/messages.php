@@ -2,6 +2,7 @@
     return [
         'Login' => 'Login',
         'password' => 'Password',
+        'Name' => 'Name',
         'email' => 'Email',
         'rememberMe' => 'Remember me',
         'All' => 'All',
@@ -15,7 +16,17 @@
         'AdminPanel' => 'Admin panel',
         'AddRouteStartTime' => 'Add route start time',
         'AddNewStop' => 'Add new stop',
-        'newStartTime' => 'Start time (in minutes):',
+        'newStartTime' => 'Start time (in minutes)',
         'add' => 'Add',
-        'isWorkDay' => 'Work day?',
+        'isWorkDay' => 'Change for',
+        'Register' => 'Register',
+        'UpdateDeltaTime' => 'Change time till stop',
+        'stop' => 'Stop',
+        'timeDelta'=> 'Time till stop',
+        'DeleteDeltaTime' => 'Delete route start time',
+        'delete' => 'delete',
+        'change' => 'change',
+        'ConfirmPassword' => 'Confirm password',
+        'AlreadyRegistered' => 'Already registered',
+        'Logout' => 'Logout'
     ];

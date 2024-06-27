@@ -28,11 +28,12 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="">
-                            {{ __('Logout') }}
+                            {{ __('messages.Logout') }}
                         </button>
                     </form>
                 @else
                     <a href="{{ route('login') }}">{{ __('messages.Login') }}</a>
+                    <a href="{{ route('register') }}">{{ __('messages.Register') }}</a>
                 @endauth
             </div>
         </div>
@@ -70,7 +71,7 @@
                                     <label for="start-time">{{__('messages.newStartTime')}}</label>
                                     <input type="number" name = "startTime" id = "start-time" min = 0 max = 1499 required>
                                     <label for="work-day">{{__('messages.isWorkDay')}}</label>
-                                    <select name = "isWorkDay" id = "work-day2">
+                                    <select name = "isWorkDay" id = "work-day">
                                         <option value="1">{{__('messages.workDay')}}</option>
                                         <option value="0">{{__('messages.holiDay')}}</option>
                                     </select>                                    
@@ -92,12 +93,12 @@
                                         <option value="1">{{__('messages.workDay')}}</option>
                                         <option value="0">{{__('messages.holiDay')}}</option>
                                     </select>                                    
-                                    <button type = 'submit'>{{__('messages.add')}}</button>
+                                    <button type = 'submit'>{{__('messages.change')}}</button>
                                     <input type="hidden" name = "routeID" id = "routeID2">
                                 </form>
                             </div>
                             <div id ='delete-starttime-form-container'>
-                                <p>{{__('messages.UpdateDeltaTime')}}</p>
+                                <p>{{__('messages.DeleteDeltaTime')}}</p>
                                 <form action="{{route ('run.delete')}}" id = 'delete-starttime-form'>
                                     @csrf
                                     @method('DELETE')
@@ -106,7 +107,7 @@
                                         <option value="1">{{__('messages.workDay')}}</option>
                                         <option value="0">{{__('messages.holiDay')}}</option>
                                     </select>
-                                    <label for="starttime-selector">{{__('messages.stop')}}</label>
+                                    <label for="run-selector">{{__('messages.newStartTime')}}</label>
                                     <select name="runID" id="run-selector"></select>
                                     <button type = 'submit'>{{__('messages.delete')}}</button>
                                 </form>

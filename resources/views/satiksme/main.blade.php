@@ -30,6 +30,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}">{{ __('messages.Login') }}</a>
+                    <a href="{{ route('register') }}">{{ __('messages.Register') }}</a>
                 @endauth
             </div>
         </div>

@@ -85,7 +85,7 @@ main {
     border-bottom: 2px solid #a22821;
 }
 
-.nav div button {
+.nav button {
     color:white;
     border: 0;
     text-transform: uppercase;
@@ -95,10 +95,11 @@ main {
     padding: 20px;
 }
 
-.nav div button:hover {
+.nav button:hover {
     background-color: #e5b400;
+    cursor:pointer;
 }
-.nav div button.selected{
+.nav button.selected{
     background-color: #a22821;
 }
 .content {
